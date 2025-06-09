@@ -1,5 +1,6 @@
 const grpc = require('@grpc/grpc-js');
-const protoLoader = require('@grpc/proto-loader');
+const protoLoader = require('@grpc/proto-loader'); 
+
 
 const packageDefinition = protoLoader.loadSync('proto/inventory.proto', {
     keepCase: true,
@@ -8,8 +9,12 @@ const packageDefinition = protoLoader.loadSync('proto/inventory.proto', {
     arrays: true,
 });
 
+const proto = grpc.loadPackageDefinition(packageDefinition);
 
-const InventoryService = grpc.loadPackageDefinition(packageDefinition).InventoryService;
-const client = new InventoryService('127.0.0.1:3002', grpc.credentials.createInsecure());
+// AQUI é onde estava o erro — precisamos acessar via pacote:
+const client = new proto.inventory.InventoryService(
+    '127.0.0.1:3002',
+    grpc.credentials.createInsecure()
+);
 
 module.exports = client;
