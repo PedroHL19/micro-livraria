@@ -20,6 +20,11 @@ server.addService(inventoryProto.InventoryService.service, {
             products: products,
         });
     },
+
+    searchProductByID: (payload, callback) => {
+        const product = products.find((p) => p.id === payload.request.id);
+        callback(null, product);
+    },
 });
 
 server.bindAsync('127.0.0.1:3002', grpc.ServerCredentials.createInsecure(), () => {

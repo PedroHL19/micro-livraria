@@ -43,6 +43,22 @@ app.get('/shipping/:cep', (req, res, next) => {
 });
 
 /**
+ * Consulta um produto pelo ID via InventoryService
+ */
+app.get('/product/:id', (req, res, next) => {
+    inventory.SearchProductByID({ id: parseInt(req.params.id) }, (err, product) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send({ error: 'something failed :(' });
+        } else if (!product) {
+            res.status(404).send({ error: 'Product not found' });
+        } else {
+            res.json(product);
+        }
+    });
+});
+
+/**
  * Inicia o router
  */
 app.listen(3000, () => {
